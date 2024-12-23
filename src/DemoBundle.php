@@ -1,11 +1,11 @@
 <?php 
-namespace OSW3\BundleBase;
+namespace OSW3\DemoBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use OSW3\BundleBase\DependencyInjection\Configuration;
+use OSW3\DemoBundle\DependencyInjection\Configuration;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class BaseBundle extends Bundle
+class DemoBundle extends Bundle
 {
     public function build(ContainerBuilder $container): void
     {

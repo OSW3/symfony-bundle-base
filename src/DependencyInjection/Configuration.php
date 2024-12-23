@@ -1,5 +1,5 @@
 <?php 
-namespace OSW3\BundleBase\DependencyInjection;
+namespace OSW3\DemoBundle\DependencyInjection;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Path;
@@ -17,14 +17,14 @@ class Configuration implements ConfigurationInterface
 	 *
 	 * @var string
 	 */
-	public const string NAME = "base";
+	public const string NAME = "demo";
 
 	/**
 	 * Define the translation domain
 	 *
 	 * @var string
 	 */
-	public const string DOMAIN = 'base';
+	public const string DOMAIN = 'demo';
 
 	/**
 	 * Update and return the Configuration Builder

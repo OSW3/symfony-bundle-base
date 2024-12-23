@@ -1,5 +1,5 @@
 <?php 
-namespace OSW3\BundleBase\DependencyInjection;
+namespace OSW3\DemoBundle\DependencyInjection;
 
 class DefinitionConfigurator
 {

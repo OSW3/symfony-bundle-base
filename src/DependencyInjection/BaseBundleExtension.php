@@ -1,15 +1,15 @@
 <?php 
-namespace OSW3\BundleBase\DependencyInjection;
+namespace OSW3\DemoBundle\DependencyInjection;
 
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Config\FileLocator;
-use OSW3\BundleBase\DependencyInjection\Configuration;
+use OSW3\DemoBundle\DependencyInjection\Configuration;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 
-class BaseBundleExtension extends Extension implements PrependExtensionInterface 
+class DemoBundleExtension extends Extension implements PrependExtensionInterface 
 {
 	/**
 	 * Bundle configuration Injection
