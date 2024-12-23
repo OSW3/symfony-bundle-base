@@ -4,7 +4,7 @@ services:
         autowire: true
         autoconfigure: true
         
-    OSW3\DemoBundle\:
+    OSW3\Base\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'

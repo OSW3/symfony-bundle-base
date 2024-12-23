@@ -1,5 +1,5 @@
 <?php
 
 return [
-    OSW3\DemoBundle\DemoBundle::class => ['all' => true],
+    OSW3\Base\BaseBundle::class => ['all' => true],
 ];

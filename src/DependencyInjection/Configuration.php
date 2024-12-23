@@ -1,10 +1,11 @@
 <?php 
-namespace OSW3\DemoBundle\DependencyInjection;
+namespace OSW3\Base\DependencyInjection;
 
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Config\Definition\ArrayNode;
 use Symfony\Component\Config\Definition\ScalarNode;
+use OSW3\Base\DependencyInjection\DefinitionConfigurator;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\PrototypedArrayNode;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -17,14 +18,14 @@ class Configuration implements ConfigurationInterface
 	 *
 	 * @var string
 	 */
-	public const string NAME = "demo";
+	public const string NAME = "base";
 
 	/**
 	 * Define the translation domain
 	 *
 	 * @var string
 	 */
-	public const string DOMAIN = 'demo';
+	public const string DOMAIN = 'base';
 
 	/**
 	 * Update and return the Configuration Builder

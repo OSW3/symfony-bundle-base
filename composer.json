@@ -15,7 +15,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "OSW3\\DemoBundle\\": "src/"
+            "OSW3\\Base\\": "src/"
         }
     },
     "require": {
