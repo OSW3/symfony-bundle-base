@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\Collection;
 use OSW3\Trait\Entity\Properties\SlugTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use OSW3\Base\Repository\Book\Category\CategoryRepository;
+use OSW3\Trait\Entity\Properties\ColorTrait;
+use OSW3\Trait\Entity\Properties\DescriptionTrait;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
@@ -44,14 +46,20 @@ class Category
     // #[ORM\Column(name: "slug", type: Types::STRING, length: 80, unique: true, nullable: false)]
     // private ?string $slug = null;
 
-    const SLUG_OPTIONS = ['properties' => ['name'], 'length' => 80];
+    const SLUG_PROPERTIES = ['name'];
     use SlugTrait;
+
+
+    // const COLOR_OPTIONS = ['nullable' => false];
+    // use ColorTrait;
 
     #[ORM\Column(name: "color", type: Types::STRING, length: 7, nullable: false)]
     private ?string $color = null;
 
     // Note
     
+    // use DescriptionTrait;
+
     #[ORM\Column(name: "note", type: Types::TEXT, nullable: true)]
     private string $note;
 

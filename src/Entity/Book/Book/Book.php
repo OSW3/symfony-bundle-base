@@ -37,10 +37,9 @@ class Book
     // BOOK DATA
     // --
 
-    const TITLE_OPTIONS = ['length' => 120, 'nullable' => false];
     use TitleTrait; 
     
-    const SLUG_OPTIONS = ['properties' => ['title'], 'length' => 120, 'nullable' => false];
+    const SLUG_PROPERTIES = ['title'];
     use SlugTrait;
 
     // #[ORM\Column(name: 'title', type: Types::STRING, length: 120, nullable: false)]
