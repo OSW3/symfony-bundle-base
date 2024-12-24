@@ -42,20 +42,20 @@ class Configuration implements ConfigurationInterface
 		return $builder;
     }
 
-	public function generateProjectConfig(string $projectDir): void
-	{
-        $configFile = Path::join($projectDir, "config/packages", static::NAME.".yaml");
+	// public function generateProjectConfig(string $projectDir): void
+	// {
+    //     $configFile = Path::join($projectDir, "config/packages", static::NAME.".yaml");
         
-        if (!file_exists($configFile)) 
-		{
-			$configArray = $this->generateArray($this);
+    //     if (!file_exists($configFile)) 
+	// 	{
+	// 		$configArray = $this->generateArray($this);
 	
-			file_put_contents($configFile, Yaml::dump([
-				static::NAME => $configArray
-			], 4));
+	// 		file_put_contents($configFile, Yaml::dump([
+	// 			static::NAME => $configArray
+	// 		], 4));
 			
-		}
-	}
+	// 	}
+	// }
 
     private function generateArray(ConfigurationInterface $configuration): array
     {

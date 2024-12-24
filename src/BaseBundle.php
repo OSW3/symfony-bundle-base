@@ -9,7 +9,7 @@ class BaseBundle extends Bundle
 {
     public function build(ContainerBuilder $container): void
     {
-        $projectDir = $container->getParameter('kernel.project_dir');
-        (new Configuration)->generateProjectConfig($projectDir);
+        // $projectDir = $container->getParameter('kernel.project_dir');
+        // (new Configuration)->generateProjectConfig($projectDir);
     }
 }
