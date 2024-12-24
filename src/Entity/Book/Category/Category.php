@@ -7,11 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use OSW3\Base\Entity\Book\Book\Book;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\Collection;
-use OSW3\Trait\Entity\Properties\SlugTrait;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 use OSW3\Base\Repository\Book\Category\CategoryRepository;
-use OSW3\Trait\Entity\Properties\ColorTrait;
-use OSW3\Trait\Entity\Properties\DescriptionTrait;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
@@ -28,48 +26,71 @@ class Category
     // ID's
     // --
 
+    /**
+     * Primary key
+     *
+     * @var integer|null
+     */
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "id")]
     private ?int $id = null;
 
+    /**
+     * Slug
+     *
+     * @var string|null
+     */
+    #[Groups('slug')]
+    #[Gedmo\Slug(fields: ['name'])]
+    #[ORM\Column(name: 'slug', type: Types::STRING, length: 255, unique: true, nullable: false)]
+    private ?string $slug = null;
 
-    // CATEGORY DATA
+
+    // CATEGORY INFO
     // --
 
-    // Name
-
+    /**
+     * Category name
+     *
+     * @var string|null
+     */
     #[ORM\Column(name: "name", type: Types::STRING, length: 80, nullable: false)]
     private ?string $name = null;
 
-    // #[Gedmo\Slug(fields: ['name'])]
-    // #[ORM\Column(name: "slug", type: Types::STRING, length: 80, unique: true, nullable: false)]
-    // private ?string $slug = null;
-
-    const SLUG_PROPERTIES = ['name'];
-    use SlugTrait;
-
-
-    // const COLOR_OPTIONS = ['nullable' => false];
-    // use ColorTrait;
-
+    /**
+     * Category colors
+     *
+     * @var string|null
+     */
     #[ORM\Column(name: "color", type: Types::STRING, length: 7, nullable: false)]
     private ?string $color = null;
-
-    // Note
     
-    // use DescriptionTrait;
-
+    /**
+     * Category description
+     *
+     * @var string
+     */
     #[ORM\Column(name: "note", type: Types::TEXT, nullable: true)]
-    private string $note;
+    private ?string $note = null;
 
 
     // DATES
     // --
 
+    /**
+     * Creation Date Time
+     *
+     * @var \DateTimeImmutable|null
+     */
     #[ORM\Column(name: "created_at", type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private ?\DateTimeImmutable $createdAt = null;
     
+    /**
+     * Update Date Time
+     *
+     * @var \DateTimeInterface|null
+     */
     #[ORM\Column(name: "updated_at", type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
@@ -77,6 +98,11 @@ class Category
     // WORKFLOW
     // --
 
+    /**
+     * Workflow state
+     *
+     * @var string
+     */
     #[ORM\Column(name: "state", length: 255, nullable: false, columnDefinition: "enum('created')")]
     private string $state = "created";
 
@@ -103,6 +129,15 @@ class Category
         return $this->id;
     }
 
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+
+    // CATEGORY INFO
+    // --
+
     public function setName(string $name): static
     {
         $this->name = $name;
@@ -113,11 +148,6 @@ class Category
     {
         return $this->name;
     }
-
-    // public function getSlug(): ?string
-    // {
-    //     return $this->slug;
-    // }
 
     public function getColor(): ?string
     {
@@ -142,11 +172,6 @@ class Category
     }
 
 
-    // CATEGORY DATA
-    // --
-
-
-
     // DATES
     // --
 
@@ -154,7 +179,6 @@ class Category
     {
         return $this->createdAt;
     }
-
     #[ORM\PrePersist]
     public function setCreatedAt(): self
     {
@@ -167,7 +191,6 @@ class Category
     {
         return $this->updatedAt;
     }
-
     public function setUpdatedAt(): self
     {
         $this->updatedAt = new \DateTime;
@@ -183,7 +206,6 @@ class Category
     {
         return $this->state;
     }
-
     public function setState(string $state): self
     {
         $this->state = $state;
@@ -202,7 +224,6 @@ class Category
     {
         return $this->books;
     }
-
     public function addBook(Book $book): self
     {
         if (!$this->books->contains($book)) {
@@ -212,7 +233,6 @@ class Category
 
         return $this;
     }
-
     public function removeBook(Book $book): self
     {
         if ($this->books->removeElement($book)) {
@@ -221,5 +241,4 @@ class Category
 
         return $this;
     }
-
 }

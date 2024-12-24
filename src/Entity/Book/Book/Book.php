@@ -4,13 +4,14 @@ namespace OSW3\Base\Entity\Book\Book;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Ramsey\Uuid\UuidInterface as UUID;
 use OSW3\Base\Entity\Book\Author\Author;
 use Doctrine\Common\Collections\Collection;
 use OSW3\Base\Entity\Book\Category\Category;
-use OSW3\Trait\Entity\Properties\TitleTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use OSW3\Base\Repository\Book\Book\BookRepository;
-use OSW3\Trait\Entity\Properties\SlugTrait;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: BookRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
@@ -28,26 +29,54 @@ class Book
     // ID's
     // --
     
+    /**
+     * Primary key
+     *
+     * @var uuid|null
+     */
+    #[Groups(['id'])]
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(name: "id")]
-    private ?int $id = null;
+    #[ORM\Column(type: "uuid", unique: true)]
+    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\CustomIdGenerator(class: "Ramsey\Uuid\Doctrine\UuidGenerator")]
+    private ?uuid $id = null;
+
+    /**
+     * Slug
+     *
+     * @var string|null
+     */
+    #[Groups('slug')]
+    #[Gedmo\Slug(fields: ['title'])]
+    #[ORM\Column(name: 'slug', type: Types::STRING, length: 180, unique: true, nullable: false)]
+    private ?string $slug = null;
 
 
-    // BOOK DATA
+    // BOOK INFOS
     // --
 
-    use TitleTrait; 
-    
-    const SLUG_PROPERTIES = ['title'];
-    use SlugTrait;
+    /**
+     * Book Title
+     *
+     * @var string|null
+     */
+    #[Groups('title')]
+    #[ORM\Column(name: 'title', type: Types::STRING, length: 180, nullable: false)]
+    private ?string $title = null;
 
-    // #[ORM\Column(name: 'title', type: Types::STRING, length: 120, nullable: false)]
-    // private ?string $title = null;
-
+    /**
+     * Book description
+     *
+     * @var string|null
+     */
     #[ORM\Column(name: 'description', type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
+    /**
+     * Book price
+     *
+     * @var string|null
+     */
     #[ORM\Column(name: 'price', type: Types::DECIMAL, precision: 5, scale: 2, nullable: false)]
     private ?string $price = null;
 
@@ -55,14 +84,29 @@ class Book
     // DATES
     // --
     
-    // #[ORM\Column(name: "created_at", type: Types::DATETIME_IMMUTABLE, nullable: false)]
-    // private ?\DateTimeImmutable $createdAt = null;
+    /**
+     * Creation date time
+     *
+     * @var \DateTimeImmutable|null
+     */
+    #[ORM\Column(name: "created_at", type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    private ?\DateTimeImmutable $createdAt = null;
 
-    // #[ORM\Column(name: "updated_at", type: Types::DATETIME_MUTABLE, nullable: true)]
-    // private ?\DateTimeInterface $updatedAt = null;
+    /**
+     * Update date time
+     *
+     * @var \DateTimeInterface|null
+     */
+    #[ORM\Column(name: "updated_at", type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
 
-    // #[ORM\Column(name: "published_at", type: Types::DATETIME_MUTABLE, nullable: true)]
-    // private ?\DateTimeInterface $publishedAt = null;
+    /**
+     * Publication date time
+     *
+     * @var \DateTimeInterface|null
+     */
+    #[ORM\Column(name: "published_at", type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $publishedAt = null;
 
 
     // BOOLEAN FLAGS
@@ -72,8 +116,13 @@ class Book
     // WORKFLOW
     // --
 
-    // #[ORM\Column(name: "state", nullable: false, columnDefinition: "enum('created','published','unpublished','deleted','erased')")]
-    // private string $state = "created";
+    /**
+     * Workflow state
+     *
+     * @var string
+     */
+    #[ORM\Column(name: "state", nullable: false, columnDefinition: "enum('created','published','unpublished','deleted','erased')")]
+    private string $state = "created";
 
 
     // RELATIONSHIP
@@ -100,8 +149,8 @@ class Book
 
     public function __construct()
     {
-        // $this->categories = new ArrayCollection;
-        // // $this->comments = new ArrayCollection();
+        $this->categories = new ArrayCollection;
+        // $this->comments = new ArrayCollection();
         // $this->attachments = new ArrayCollection();
     }
 
@@ -109,32 +158,35 @@ class Book
     // ID's
     // --
 
-    public function getId(): ?int
+    public function getId(): ?uuid
     {
         return $this->id;
     }
 
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
 
-    // BOOK DATA
+
+    // BOOK INFOS
     // --
 
-    // public function getTitle(): ?string
-    // {
-    //     return $this->title;
-    // }
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
 
-    // public function setTitle(string $title): self
-    // {
-    //     $this->title = $title;
-
-    //     return $this;
-    // }
+        return $this;
+    }
 
     public function getDescription(): ?string
     {
         return $this->description;
     }
-
     public function setDescription(?string $description): self
     {
         $this->description = $description;
@@ -146,7 +198,6 @@ class Book
     {
         return $this->price;
     }
-
     public function setPrice(string $price): self
     {
         $this->price = $price;
@@ -158,43 +209,40 @@ class Book
     // DATES
     // --
 
-    // public function getCreatedAt(): ?\DateTimeImmutable
-    // {
-    //     return $this->createdAt;
-    // }
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+    #[ORM\PrePersist]
+    public function setCreatedAt(): self
+    {
+        $this->createdAt = new \DateTimeImmutable;
 
-    // #[ORM\PrePersist]
-    // public function setCreatedAt(): self
-    // {
-    //     $this->createdAt = new \DateTimeImmutable;
+        return $this;
+    }
 
-    //     return $this;
-    // }
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+    #[ORM\PreUpdate]
+    public function setUpdatedAt(): self
+    {
+        $this->updatedAt = new \DateTime;
 
-    // public function getUpdatedAt(): ?\DateTimeInterface
-    // {
-    //     return $this->updatedAt;
-    // }
+        return $this;
+    }
 
-    // #[ORM\PreUpdate]
-    // public function setUpdatedAt(): self
-    // {
-    //     $this->updatedAt = new \DateTime;
+    public function getPublishedAt(): ?\DateTimeInterface
+    {
+        return $this->publishedAt;
+    }
+    public function setPublishedAt(?\DateTimeInterface $publishedAt): self
+    {
+        $this->publishedAt = $publishedAt;
 
-    //     return $this;
-    // }
-
-    // public function getPublishedAt(): ?\DateTimeInterface
-    // {
-    //     return $this->publishedAt;
-    // }
-
-    // public function setPublishedAt(?\DateTimeInterface $publishedAt): self
-    // {
-    //     $this->publishedAt = $publishedAt;
-
-    //     return $this;
-    // }
+        return $this;
+    }
 
 
     // BOOLEAN FLAGS
@@ -204,17 +252,16 @@ class Book
     // WORKFLOW
     // --
 
-    // public function getState(): ?string
-    // {
-    //     return $this->state;
-    // }
+    public function getState(): ?string
+    {
+        return $this->state;
+    }
+    public function setState(string $state): self
+    {
+        $this->state = $state;
 
-    // public function setState(string $state): self
-    // {
-    //     $this->state = $state;
-
-    //     return $this;
-    // }
+        return $this;
+    }
 
 
     // // RELATIONSHIP
