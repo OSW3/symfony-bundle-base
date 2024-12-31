@@ -43,7 +43,7 @@ class Category
      */
     #[Groups('slug')]
     #[Gedmo\Slug(fields: ['name'])]
-    #[ORM\Column(name: 'slug', type: Types::STRING, length: 255, unique: true, nullable: false)]
+    #[ORM\Column(name: 'slug', type: Types::STRING, length: 80, unique: true, nullable: false)]
     private ?string $slug = null;
 
 
